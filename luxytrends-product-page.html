@@ -1,0 +1,827 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>LuxyTrends | AI Dream Try-On</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700;800&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: radial-gradient(circle at 20% 30%, #FFF9F0 0%, #FEFAF3 100%);
+  font-family: 'Inter', sans-serif;
+  color: #1E2A2E;
+  overflow-x: hidden;
+}
+
+/* scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #E9E2D4; border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: #A5B9B0; border-radius: 10px; }
+
+/* luxury glass accents */
+.glass-panel {
+  background: rgba(255, 255, 245, 0.75);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(230, 215, 190, 0.6);
+  border-radius: 2rem;
+}
+
+/* header */
+header {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 1.5rem 2.5rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.logo {
+  flex: 1;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.7rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #16484F 0%, #2A6B6E 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+.logo span { font-size: 3.2rem; font-weight: 800; color: #246A73; background: none; }
+
+.search {
+  flex: 0 0 360px;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: white;
+  border-radius: 60px;
+  padding: 0.85rem 1.5rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.02), 0 2px 4px rgba(0,0,0,0.02);
+  border: 1px solid #EFE4D4;
+  transition: all 0.2s ease;
+}
+.search:focus-within { border-color: #B8CFC4; box-shadow: 0 12px 28px rgba(30,50,45,0.08); }
+.search input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  font-size: 0.95rem;
+  outline: none;
+  font-weight: 400;
+}
+
+.icons { display: flex; gap: 0.75rem; }
+.icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  background: white;
+  border-radius: 50%;
+  border: 1px solid #EFE4D4;
+  font-size: 1.3rem;
+  transition: 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+.icon:hover { background: #F5EFE6; transform: scale(0.96);}
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #D96C4E;
+  color: white;
+  font-size: 0.7rem;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+}
+.checkout {
+  background: #16484F;
+  color: white;
+  border: none;
+  padding: 0.9rem 2rem;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: 0.25s ease;
+  box-shadow: 0 8px 18px rgba(22,72,79,0.2);
+}
+.checkout:hover { background: #0F363B; transform: translateY(-2px); }
+
+/* elegant nav */
+nav {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0.5rem 2.5rem 1.2rem;
+  display: flex;
+  gap: 3rem;
+  border-bottom: 1px solid #EFE4D4;
+  overflow-x: auto;
+}
+nav a {
+  text-decoration: none;
+  font-weight: 500;
+  color: #2C3E40;
+  font-size: 0.95rem;
+  transition: 0.2s;
+  letter-spacing: 0.3px;
+}
+nav a:hover { color: #246A73; border-bottom: 2px solid #B8CFC4; }
+
+/* product grid */
+.page {
+  max-width: 1500px;
+  margin: 3rem auto 5rem;
+  padding: 0 2.5rem;
+  display: grid;
+  grid-template-columns: minmax(360px, 620px) 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+/* gallery premium */
+.gallery-card {
+  background: white;
+  border-radius: 2.5rem;
+  padding: 1.4rem;
+  box-shadow: 0 30px 55px -20px rgba(30, 40, 35, 0.2);
+  transition: all 0.3s;
+ 
+}
+.main-img {
+  height: 600px;
+  background: #fff;
+}
+
+.main-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+}
+.main-img:hover img { transform: scale(1.02);}
+.floating-tag {
+  position: absolute;
+  left: 1.2rem;
+  top: 1.2rem;
+  background: rgba(255,250,240,0.9);
+  backdrop-filter: blur(8px);
+  border-radius: 40px;
+  padding: 0.4rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #16484F;
+  letter-spacing: 0.5px;
+}
+.zoom {
+  position: absolute;
+  right: 1.2rem;
+  top: 1.2rem;
+  background: rgba(255,255,245,0.9);
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.thumbs {
+  display: flex;
+  gap: 0.9rem;
+  margin-top: 1.2rem;
+}
+.thumb {
+  width: 88px;
+  height: 100px;
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: 0.2s;
+  cursor: pointer;
+  background: #F5EFE6;
+}
+.thumb.active { border-color: #246A73; box-shadow: 0 8px 18px rgba(0,0,0,0.05);}
+.thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+/* product info */
+.info { padding-top: 0.2rem; }
+.breadcrumb { color: #8F9B8E; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 1rem; }
+.info h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3.4rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #1C3638;
+  letter-spacing: -0.01em;
+}
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 1.5rem 0 1.2rem;
+}
+.meta span {
+  background: #FFFBF5;
+  border: 1px solid #EFE4D4;
+  border-radius: 100px;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #4A5B56;
+}
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #E4B363;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+.price {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #246A73;
+  margin-bottom: 1.2rem;
+}
+.desc {
+  color: #57706B;
+  line-height: 1.65;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.option-box {
+  background: #FEFCF8;
+  border: 1px solid #E8DFD2;
+  border-radius: 1.8rem;
+  padding: 1.5rem;
+  margin-bottom: 1.8rem;
+}
+.option-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.sizechart {
+  background: none;
+  border: none;
+  color: #246A73;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.sizepill {
+  background: #E9F1EE;
+  display: inline-block;
+  padding: 0.7rem 2rem;
+  border-radius: 60px;
+  font-weight: 600;
+  color: #16484F;
+  border: 1px solid #C7DDD2;
+}
+
+.buyrow {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+.qty {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid #E0D6CA;
+  border-radius: 2rem;
+  padding: 0 0.5rem;
+  gap: 1rem;
+  width: 130px;
+  justify-content: center;
+}
+.qty button {
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: #246A73;
+  width: 32px;
+  cursor: pointer;
+}
+.qty input {
+  width: 40px;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  outline: none;
+}
+.addbag {
+  flex: 1;
+  background: #16484F;
+  border: none;
+  border-radius: 2rem;
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: 0.2s;
+  box-shadow: 0 10px 20px rgba(22,72,79,0.18);
+}
+.addbag:hover { background: #0E3C42; transform: scale(0.98);}
+.tryai {
+  width: 100%;
+  background: linear-gradient(105deg, #6246EA 0%, #A56EFF 100%);
+  border: none;
+  border-radius: 2rem;
+  padding: 1.2rem;
+  font-weight: 700;
+  font-size: 1rem;
+  color: white;
+  margin-top: 0.5rem;
+  box-shadow: 0 15px 28px -8px rgba(98,70,234,0.3);
+  transition: all 0.3s;
+}
+.tryai:hover { filter: brightness(1.03); transform: translateY(-2px); letter-spacing: 0.3px; }
+.whatsapp-share {
+  width: 100%;
+  background: #25D366;
+  border-radius: 2rem;
+  border: none;
+  padding: 1rem;
+  margin-top: 0.8rem;
+  font-weight: 700;
+  color: white;
+  font-size: 0.95rem;
+  transition: 0.2s;
+}
+.tryai-note {
+  font-size: 0.7rem;
+  text-align: center;
+  margin-top: 1rem;
+  color: #899D96;
+}
+
+/* MODAL DREAM */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 25, 22, 0.7);
+  backdrop-filter: blur(12px);
+  padding: 1.5rem;
+}
+.overlay.open { display: flex; }
+.modal {
+  max-width: 780px;
+  width: 100%;
+  background: #FFFFFFF0;
+  backdrop-filter: blur(2px);
+  border-radius: 2.2rem;
+  border: 1px solid rgba(255,245,225,0.7);
+  box-shadow: 0 40px 70px rgba(0,0,0,0.25);
+  overflow: hidden;
+  animation: fadeSlide 0.25s ease;
+}
+@keyframes fadeSlide {
+  from { opacity: 0; transform: scale(0.96) translateY(12px);}
+  to { opacity: 1; transform: scale(1) translateY(0);}
+}
+.modal-content { padding: 2rem 2rem 2rem 2rem; }
+.modal-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+.modal h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem;
+  color: #16484F;
+}
+.drop {
+  background: #FBF9F5;
+  border: 2px dashed #CEC2AE;
+  border-radius: 2rem;
+  text-align: center;
+  padding: 2.2rem;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.drop.drag { background: #ECE5F5; border-color: #A56EFF;}
+.preview-grid {
+  display: none;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+.preview-grid.show { display: grid; }
+.pv-card {
+  background: #FCFAF5;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  border: 1px solid #E7DDCF;
+}
+.pv-card img, .gen-preview {
+  width: 100%;
+  
+  
+}
+.gen-preview {
+  background: linear-gradient(135deg, #F4F0E8, #FDF9F2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+.spinner-sm {
+  width: 48px;
+  height: 48px;
+  border: 3px solid #E6DFD1;
+  border-top-color: #6246EA;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+.steps {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1.8rem 0 1.8rem;
+}
+.step {
+  flex: 1;
+  background: #F9F5EE;
+  border-radius: 1.5rem;
+  padding: 1rem 0.2rem;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #5D6F68;
+}
+.step b {
+  display: inline-block;
+  background: #DDD2C0;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  border-radius: 50%;
+  color: #2C423F;
+  margin-bottom: 6px;
+}
+.gen-preview img{
+  object-fit: cover;
+}
+.modal-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.4rem;
+}
+.btn-soft, .btn-glow {
+  flex: 1;
+  border-radius: 2rem;
+  padding: 1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btn-soft { background: #EFE4D4; color: #2C3E40; }
+.btn-glow { background: #6246EA; color: white; box-shadow: 0 8px 18px #6246EA30; }
+.btn-glow:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.result-group { display: none; gap: 1rem; margin-top: 1rem; }
+.result-group.show { display: flex; }
+@media (max-width: 900px) {
+  .page { grid-template-columns: 1fr; gap: 2rem; padding: 0 1.5rem; }
+  .info h1 { font-size: 2.6rem; }
+  .steps { flex-wrap: wrap; }
+}
+@media (max-width: 580px) {
+  .preview-grid { grid-template-columns: 1fr; }
+  .modal-content { padding: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="search"><span>🔮</span><input placeholder="Search dream outfit..."></div>
+  <div class="logo"><span>L</span>uxy<span>T</span>rends</div>
+  <div class="icons">
+    <button class="icon">♡</button>
+    <button class="icon">🛍️ <span class="badge" id="cartBadge">0</span></button>
+    <button class="icon">👤</button>
+  </div>
+  <button class="checkout">Secure Checkout</button>
+</header>
+
+<nav>
+  <a href="#">✨ New Arrivals</a>
+  <a href="#">👧 Girls</a>
+  <a href="#">👦 Boys</a>
+  <a href="#">🍼 Baby</a>
+  <a href="#">🎀 Accessories</a>
+  <a href="#">🌟 Gift Card</a>
+</nav>
+
+<main class="page">
+  <section class="gallery-card">
+    <div class="main-img">
+  <span class="floating-tag">🌿 Premium Organic Cotton</span>
+
+  <img id="mainImg"
+     src="{% static 'Images/kid1.jpg' %}"
+     alt="Dreamy sleeping bag">
+
+  <button class="zoom" id="zoomBtn">🔍</button>
+</div>
+    
+  </section>
+
+  <section class="info">
+    <div class="breadcrumb">✨ Baby Nest / Signature Collection</div>
+    <h1>Kids Wear · 3–6 year old</h1>
+    <div class="meta"><span>🐻 ORGANIC</span><span>🌸 GENDER-NEUTRAL</span><span>⭐ BABY SAFE</span></div>
+    <div class="rating">★★★★★ <small>4.9 ★ from 340+ reviews — dreamy softness</small></div>
+    <div class="price">£13.50</div>
+    <p class="desc">Magical woodland dreams await — made from 100% GOTS cotton, breathable & temperature-regulating. Perfect for peaceful nights and enchanted nurseries.</p>
+    <div class="option-box">
+      <div class="option-head"><b>🍼 Size (months)</b><button class="sizechart">📐 Size Guide</button></div>
+      <span class="sizepill">3–6 M (fits 61–68cm)</span>
+    </div>
+    <div class="buyrow">
+      <div class="qty"><button id="minusBtn">−</button><input id="qtyInput" value="1"><button id="plusBtn">+</button></div>
+      <button class="addbag" id="addBagBtn">Add to Bag 🧸</button>
+    </div>
+    <button class="tryai" id="openAIModalBtn">✨ Try with Dream AI ✨</button>
+    <button class="whatsapp-share" id="whatsappShareBtn">📱 Share on WhatsApp</button>
+    <p class="tryai-note">✨ AI Baby Try-On — upload a photo & see the  little one in seconds</p>
+  </section>
+</main>
+
+<div class="overlay" id="aiOverlay">
+  <div class="modal">
+    <div class="modal-content">
+      <div class="modal-top">
+        <div><h2>🌸 AI Dream Try-On</h2><p style="color:#6F7E78;">See your kids in style</p></div>
+        <button class="sizechart" id="closeModalBtn" style="font-size:1.8rem;">✕</button>
+      </div>
+      <div class="drop" id="dropZone">
+        <input type="file" id="photoFile" accept="image/*" hidden>
+        <div style="font-size:3rem;">📸</div>
+        <div><b>Tap to upload</b> or drag kids photo</div>
+        <div style="font-size:0.7rem;">JPG/PNG, max 10MB</div>
+      </div>
+      <div class="preview-grid" id="previewGrid">
+        <div class="pv-card"><img id="userPhotoPreview" alt="your photo"><div class="cap" style="padding:0.5rem; text-align:center;">✨ your photo</div></div>
+        <div class="pv-card" id="aiResultCard"><div class="gen-preview" id="aiGenBox"><span>✨ AI magic ✨</span><div style="font-size:0.8rem;">preview will appear</div></div><div class="cap" style="text-align:center;">AI try-on</div></div>
+      </div>
+      <div class="steps" id="stepsModal"><div class="step"><b>1</b>Upload photo</div><div class="step"><b>2</b>AI generation</div><div class="step"><b>3</b>See magic</div></div>
+      <div class="modal-buttons" id="actionButtons">
+        <button class="btn-soft" id="resetAIbtn">Reset</button>
+        <button class="btn-glow" id="generateAIBtn" disabled>✨ Generate AI Preview ✨</button>
+      </div>
+      <div class="result-group" id="resultGroup">
+        <button class="btn-soft" id="tryAgainBtn">Try another photo</button>
+        <button class="btn-glow" id="addFromAIBtn">Add to Bag & Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ---------- creative interactions ----------
+let cartCount = 0;
+const cartBadge = document.getElementById('cartBadge');
+const qtyInput = document.getElementById('qtyInput');
+const minusBtn = document.getElementById('minusBtn');
+const plusBtn = document.getElementById('plusBtn');
+const addBagBtn = document.getElementById('addBagBtn');
+const openModalBtn = document.getElementById('openAIModalBtn');
+const aiOverlay = document.getElementById('aiOverlay');
+const closeModalBtn = document.getElementById('closeModalBtn');
+const dropZone = document.getElementById('dropZone');
+const photoFile = document.getElementById('photoFile');
+const userPhotoPreview = document.getElementById('userPhotoPreview');
+const previewGrid = document.getElementById('previewGrid');
+const generateBtn = document.getElementById('generateAIBtn');
+const resetBtn = document.getElementById('resetAIbtn');
+const actionButtons = document.getElementById('actionButtons');
+const resultGroup = document.getElementById('resultGroup');
+const aiGenBox = document.getElementById('aiGenBox');
+const stepsModal = document.getElementById('stepsModal');
+const tryAgainBtn = document.getElementById('tryAgainBtn');
+const addFromAIBtn = document.getElementById('addFromAIBtn');
+const whatsappBtn = document.getElementById('whatsappShareBtn');
+
+let currentGarmentUrl = document.getElementById('mainImg').src;
+
+// quantity
+function updateQty(delta) {
+  let val = parseInt(qtyInput.value) || 1;
+  val = Math.max(1, val + delta);
+  qtyInput.value = val;
+}
+minusBtn.onclick = () => updateQty(-1);
+plusBtn.onclick = () => updateQty(1);
+addBagBtn.onclick = () => { cartCount++; cartBadge.innerText = cartCount; alert(`🧸 Added to bag! Total items: ${cartCount}`); };
+
+// Thumbnail switcher
+document.querySelectorAll('.thumb').forEach(thumb => {
+  thumb.addEventListener('click', () => {
+    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+    thumb.classList.add('active');
+    const newSrc = thumb.querySelector('img').src;
+    document.getElementById('mainImg').src = newSrc;
+    currentGarmentUrl = newSrc;
+  });
+});
+
+// AI Modal logic
+openModalBtn.onclick = () => { aiOverlay.classList.add('open'); resetModalUI(); };
+closeModalBtn.onclick = () => aiOverlay.classList.remove('open');
+aiOverlay.addEventListener('click', (e) => { if(e.target === aiOverlay) aiOverlay.classList.remove('open'); });
+
+let selectedFile = null;
+
+function resetModalUI() {
+  previewGrid.classList.remove('show');
+  dropZone.style.display = 'block';
+  stepsModal.style.display = 'flex';
+  actionButtons.style.display = 'flex';
+  resultGroup.classList.remove('show');
+  generateBtn.disabled = true;
+  photoFile.value = '';
+  selectedFile = null;
+  userPhotoPreview.src = '';
+  aiGenBox.innerHTML = `<div class="gen-preview"><span>✨ AI magic ✨</span><div style="font-size:0.8rem;">preview will appear</div></div>`;
+}
+
+dropZone.addEventListener('click', () => photoFile.click());
+photoFile.addEventListener('change', (e) => {
+  if(e.target.files && e.target.files[0]) handleFile(e.target.files[0]);
+});
+dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
+dropZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropZone.classList.remove('drag');
+  if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+});
+
+function handleFile(file) {
+  if(file.size > 10 * 1024 * 1024) { alert("Max 10MB"); return; }
+  selectedFile = file;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    userPhotoPreview.src = ev.target.result;
+    previewGrid.classList.add('show');
+    dropZone.style.display = 'none';
+    stepsModal.style.display = 'none';
+    generateBtn.disabled = false;
+  };
+  reader.readAsDataURL(file);
+}
+
+generateBtn.onclick = async () => {
+  if (!selectedFile) return;
+
+  generateBtn.disabled = true;
+  aiGenBox.innerHTML = `
+    <div class="gen-preview">
+      <div class="spinner-sm"></div>
+      <div>Generating real AI try-on...</div>
+    </div>
+  `;
+
+  try {
+    const formData = new FormData();
+    formData.append("model_image", selectedFile);
+    formData.append("garment_image_url", currentGarmentUrl);
+
+    const startResp = await fetch("/api/try-on", {
+      method: "POST",
+      body: formData
+    });
+
+    const startData = await startResp.json();
+
+    if (!startData.ok || !startData.job_id) {
+      throw new Error(startData.error || "Failed to start AI job");
+    }
+
+    const jobId = startData.job_id;
+    let result = null;
+
+    for (let i = 0; i < 120; i++) {
+      await new Promise(r => setTimeout(r, 2000));
+
+      const pollResp = await fetch(`/api/try-on/status/${jobId}`);
+      const pollData = await pollResp.json();
+
+      if (pollData.status === "completed") {
+        result = pollData;
+        break;
+      }
+
+      if (pollData.status === "failed") {
+        throw new Error(pollData.error || "AI generation failed");
+      }
+    }
+
+    if (result && result.result_url) {
+      aiGenBox.innerHTML = `
+        <img src="${result.result_url}"
+             style="width:100%;height:100%;object-fit:cover;"
+             alt="AI try-on result">
+      `;
+      actionButtons.style.display = "none";
+      resultGroup.classList.add("show");
+    } else {
+      throw new Error("Timed out waiting for AI result");
+    }
+
+  } catch (err) {
+    aiGenBox.innerHTML = `
+      <div class="gen-preview">
+        <div>⚠️ ${err.message}</div>
+      </div>
+    `;
+    generateBtn.disabled = false;
+  }
+};
+
+resetBtn.onclick = resetModalUI;
+tryAgainBtn.onclick = resetModalUI;
+addFromAIBtn.onclick = () => {
+  cartCount++;
+  cartBadge.innerText = cartCount;
+  aiOverlay.classList.remove('open');
+  alert("🧸✨ Dreamy sleeping bag added to bag! (AI magic)");
+};
+
+// WhatsApp share with product link
+function shareWhatsApp() {
+  const url = window.location.href;
+  const text = `🧸✨ LuxyTrends Baby Sleeping Bag — Try the AI Baby Try-On! ✨👶\n\nSee the magic: ${url}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+}
+whatsappBtn.onclick = shareWhatsApp;
+
+// Zoom effect (just for delight)
+document.getElementById('zoomBtn').addEventListener('click', () => {
+  const mainImg = document.getElementById('mainImg');
+  const modalZoom = document.createElement('div');
+  modalZoom.style.position = 'fixed'; modalZoom.style.top='0'; modalZoom.style.left='0'; modalZoom.style.width='100%'; modalZoom.style.height='100%';
+  modalZoom.style.background='rgba(0,0,0,0.85)'; modalZoom.style.display='flex'; modalZoom.style.alignItems='center'; modalZoom.style.justifyContent='center';
+  modalZoom.style.zIndex='1000'; modalZoom.style.cursor='pointer';
+  const imgZoom = document.createElement('img');
+  imgZoom.src = mainImg.src;
+  imgZoom.style.maxWidth='90vw'; imgZoom.style.maxHeight='90vh'; imgZoom.style.borderRadius='2rem';
+  modalZoom.appendChild(imgZoom);
+  document.body.appendChild(modalZoom);
+  modalZoom.onclick = () => modalZoom.remove();
+});
+
+// simulate dynamic product fetch (API simulation)
+async function loadProductSimulate() {
+  try {
+    const fakeApi = { name: "Baby Girl Nature Themed Sleeping Bag 3–6 Months", price: 13.50, category: "ACCESSORIES", brand: "LUXYTRENDS", garment_image_url: "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=800&q=85" };
+    document.querySelector('.info h1').innerText = fakeApi.name;
+    document.querySelector('.price').innerText = `£${fakeApi.price.toFixed(2)}`;
+    const metaSpans = document.querySelectorAll('.meta span');
+    if(metaSpans[0]) metaSpans[0].innerHTML = `<b>CATEGORY:</b> ${fakeApi.category}`;
+    if(metaSpans[1]) metaSpans[1].innerHTML = `<b>BRAND:</b> ${fakeApi.brand}`;
+    currentGarmentUrl = fakeApi.garment_image_url;
+    document.getElementById('mainImg').src = fakeApi.garment_image_url;
+    const firstThumb = document.querySelector('.thumb.active img');
+    if(firstThumb) firstThumb.src = fakeApi.garment_image_url;
+  } catch(e) {}
+}
+
+
+// enhance with smooth cart badge pop
+function animateCart() { cartBadge.style.transform = "scale(1.3)"; setTimeout(() => cartBadge.style.transform = "", 200); }
+addBagBtn.addEventListener('click', animateCart);
+</script>
+</body>
+</html>
