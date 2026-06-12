@@ -73,7 +73,7 @@ def try_on(request):
     if request.method != 'POST':
         return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
 
-    fashn_api_key = os.environ.get('FASHN_API_KEY', 'rsyfHB-RIkwrBhZe1GD-3Ahwrnq10dsoUbWWifwAwW70Vc17fmclex3SWbt6lKqAFUrvDY0DoKpU7EBbdzSeiA==').strip()
+    fashn_api_key = os.environ.get('FASHN_API_KEY', 'fa-0zqroXcBodYK-dqsb27q3fnci1z1UkSzqG28x.......').strip()
     if not fashn_api_key or fashn_api_key == 'paste_your_fashn_api_key_here':
         return JsonResponse({'error': 'FASHN_API_KEY is not configured.'}, status=500)
 
@@ -120,7 +120,7 @@ def try_on(request):
 
 def try_on_status(request, job_id):
     """Poll endpoint — frontend calls this to check job progress directly from Fashn."""
-    fashn_api_key = os.environ.get('FASHN_API_KEY', 'rsyfHB-RIkwrBhZe1GD-3Ahwrnq10dsoUbWWifwAwW70Vc17fmclex3SWbt6lKqAFUrvDY0DoKpU7EBbdzSeiA==').strip()
+    fashn_api_key = os.environ.get('FASHN_API_KEY', 'fa-0zqroXcBodYK-dqsb27q3fnci1z1UkSzqG28x.......').strip()
     if not fashn_api_key:
         return JsonResponse({'error': 'FASHN_API_KEY is not configured.'}, status=500)
     
