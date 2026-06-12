@@ -124,8 +124,7 @@ def try_on(request):
         return JsonResponse({'ok': True, 'job_id': prediction_id})
     except requests.exceptions.HTTPError as e:
         if e.response.status_code == 429:
-            # Fallback to a mock job so the frontend doesn't break during testing
-            return JsonResponse({'ok': True, 'job_id': 'mock_job_id_429'})
+            return JsonResponse({'error': 'AI Try-On service is currently experiencing high traffic. Please try again later.'}, status=429)
         return JsonResponse({'error': f'Failed to start Fashn job: {str(e)}'}, status=500)
     except Exception as e:
         return JsonResponse({'error': f'Failed to start Fashn job: {str(e)}'}, status=500)
@@ -133,16 +132,6 @@ def try_on(request):
 
 def try_on_status(request, job_id):
     """Poll endpoint — frontend calls this to check job progress directly from Fashn."""
-    if job_id == 'mock_job_id_429':
-        import time
-        time.sleep(1) # simulate some processing time
-        return JsonResponse({
-            'status': 'completed',
-            'result_url': 'https://images.unsplash.com/photo-1519689680058-324335c77eba?w=800&q=85', # Mock baby clothing image
-            'prediction_id': job_id,
-            'credits_used': 0,
-        })
-
     fashn_api_key = os.environ.get('FASHN_API_KEY', '').strip()
     if not fashn_api_key:
         return JsonResponse({'error': 'FASHN_API_KEY is not configured.'}, status=500)
