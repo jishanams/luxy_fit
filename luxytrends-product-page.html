@@ -519,6 +519,20 @@ nav a:hover { color: #246A73; border-bottom: 2px solid #B8CFC4; }
   .preview-grid { grid-template-columns: 1fr; }
   .modal-content { padding: 1.5rem; }
 }
+#shareFromAIBtn {
+  background: #25D366;
+  color: white;
+  border-radius: 2rem;
+  border: none;
+  padding: 1rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: 0.2s;
+}
+#shareFromAIBtn:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
 </style>
 </head>
 <body>
@@ -601,14 +615,30 @@ nav a:hover { color: #246A73; border-bottom: 2px solid #B8CFC4; }
         <button class="btn-glow" id="generateAIBtn" disabled>✨ Generate AI Preview ✨</button>
       </div>
       <div class="result-group" id="resultGroup">
-        <button class="btn-soft" id="tryAgainBtn">Try another photo</button>
-        <button class="btn-glow" id="addFromAIBtn">Add to Bag & Close</button>
-      </div>
+  <button class="btn-soft" id="tryAgainBtn">Try another photo</button>
+  <button class="btn-glow" id="addFromAIBtn">Add to Bag & Close</button>
+  <button class="btn-glow" id="shareFromAIBtn">📱 Share Result</button>
+</div>
     </div>
   </div>
 </div>
 
 <script>
+
+const shareFromAIBtn = document.getElementById('shareFromAIBtn');
+
+shareFromAIBtn.onclick = () => {
+  const aiImg = document.querySelector('#aiGenBox img');
+  if(!aiImg || !aiImg.src) {
+    alert("No AI image to share!");
+    return;
+  }
+  const url = window.location.href; // optional product page link
+  const text = `✨ Check out this AI try-on result! ✨\n\nSee it here: ${url}\nOr view the image directly: ${aiImg.src}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+};
+
+
 // ---------- creative interactions ----------
 let cartCount = 0;
 const cartBadge = document.getElementById('cartBadge');

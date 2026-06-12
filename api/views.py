@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from django.conf import settings
-from .models import Product
+# from .models import Product
 
 
 # In-memory job store (simple, resets on server restart)
