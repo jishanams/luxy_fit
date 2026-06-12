@@ -1,10 +1,16 @@
 {
   "version": 2,
-  "name": "luxy-fit",
+  "name": "luxytrends-ai-tryon",
   "builds": [
-    { "src": "public/**/*", "use": "@vercel/static" }
+    {
+      "src": "luxytrends_backend/wsgi.py",
+      "use": "@vercel/python"
+    }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/public/$1" }
+    {
+      "src": "/(.*)",
+      "dest": "luxytrends_backend/wsgi.py"
+    }
   ]
 }
