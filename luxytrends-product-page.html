@@ -514,13 +514,33 @@ nav a:hover { color: #246A73; border-bottom: 2px solid #B8CFC4; }
 .result-group { display: none; gap: 1rem; margin-top: 1rem; }
 .result-group.show { display: flex; }
 @media (max-width: 900px) {
-  .page { grid-template-columns: 1fr; gap: 2rem; padding: 0 1.5rem; }
+  .page { grid-template-columns: 1fr; gap: 2rem; padding: 0 1.5rem; margin-top: 1.5rem; }
   .info h1 { font-size: 2.6rem; }
   .steps { flex-wrap: wrap; }
+  .main-img { height: 450px; }
 }
 @media (max-width: 580px) {
+  header { padding: 1rem 1.2rem; gap: 1rem; }
+  .logo { font-size: 2rem; order: 1; flex: 1; }
+  .logo span { font-size: 2.4rem; }
+  .icons { order: 2; }
+  .search { flex: 1 1 100%; order: 3; }
+  .checkout { display: none; }
+  nav { padding: 0.5rem 1.2rem 1rem; }
+  .page { margin-top: 1rem; padding: 0 1.2rem; }
+  .main-img { height: 350px; border-radius: 1.5rem; }
+  .gallery-card { padding: 1rem; border-radius: 1.5rem; }
+  .info h1 { font-size: 2.2rem; }
+  .price { font-size: 2rem; }
+  .buyrow { flex-direction: column; }
+  .qty { width: 100%; padding: 0.5rem; }
+  .thumbs { justify-content: center; }
+  .thumb { width: 65px; height: 75px; }
   .preview-grid { grid-template-columns: 1fr; }
   .modal-content { padding: 1.5rem; }
+  .modal h2 { font-size: 1.8rem; }
+  .modal-buttons { flex-direction: column; }
+  .result-group { flex-direction: column; }
 }
 #shareFromAIBtn {
   background: #25D366;
