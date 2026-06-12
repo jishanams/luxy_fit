@@ -73,7 +73,7 @@ def try_on(request):
     if request.method != 'POST':
         return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
 
-    fashn_api_key = os.environ.get('FASHN_API_KEY', 'fa-0zqroXcBodYK-dqsb27q3fnci1z1UkSzqG28x.......').strip()
+    fashn_api_key = os.environ.get('FASHN_API_KEY', 'fa-AzOSHoVB4lyl-wvSAYDaRvFBl0eqgHjib7TX4').strip()
     if not fashn_api_key or fashn_api_key == 'paste_your_fashn_api_key_here':
         return JsonResponse({'error': 'FASHN_API_KEY is not configured.'}, status=500)
 
@@ -107,20 +107,37 @@ def try_on(request):
         }
     }
     
-    try:
-        run_resp = requests.post(f"{base_url}/run", json=input_data, headers=headers, timeout=30)
-        run_resp.raise_for_status()
-        prediction_id = run_resp.json().get("id")
-        if not prediction_id:
-            return JsonResponse({'error': 'No prediction ID returned from Fashn'}, status=500)
-        return JsonResponse({'ok': True, 'job_id': prediction_id})
-    except Exception as e:
-        return JsonResponse({'error': f'Failed to start Fashn job: {str(e)}'}, status=500)
+    max_retries = 3
+    retry_delay = 2
+    
+    for attempt in range(max_retries):
+        try:
+            run_resp = requests.post(f"{base_url}/run", json=input_data, headers=headers, timeout=30)
+            if run_resp.status_code == 429:
+                if attempt < max_retries - 1:
+                    time.sleep(retry_delay)
+                    retry_delay *= 2
+                    continue
+            run_resp.raise_for_status()
+            prediction_id = run_resp.json().get("id")
+            if not prediction_id:
+                return JsonResponse({'error': 'No prediction ID returned from Fashn'}, status=500)
+            return JsonResponse({'ok': True, 'job_id': prediction_id})
+        except requests.exceptions.HTTPError as e:
+            err_msg = str(e)
+            if e.response is not None:
+                try:
+                    err_msg += " - Details: " + e.response.text
+                except Exception:
+                    pass
+            return JsonResponse({'error': f'Failed to start Fashn job: {err_msg}'}, status=500)
+        except Exception as e:
+            return JsonResponse({'error': f'Failed to start Fashn job: {str(e)}'}, status=500)
 
 
 def try_on_status(request, job_id):
     """Poll endpoint — frontend calls this to check job progress directly from Fashn."""
-    fashn_api_key = os.environ.get('FASHN_API_KEY', 'fa-0zqroXcBodYK-dqsb27q3fnci1z1UkSzqG28x.......').strip()
+    fashn_api_key = os.environ.get('FASHN_API_KEY', 'fa-AzOSHoVB4lyl-wvSAYDaRvFBl0eqgHjib7TX4').strip()
     if not fashn_api_key:
         return JsonResponse({'error': 'FASHN_API_KEY is not configured.'}, status=500)
     
