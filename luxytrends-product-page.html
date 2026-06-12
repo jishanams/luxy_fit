@@ -762,7 +762,7 @@ generateBtn.onclick = async () => {
     const timeEl = document.getElementById('genTime');
     const msgEl = document.getElementById('genMessage');
     if(timeEl) timeEl.innerText = elapsed + "s elapsed";
-    if(elapsed % 2 === 0 && msgEl) {
+    if(elapsed % 3 === 0 && msgEl) {
       msgIdx = (msgIdx + 1) % messages.length;
       msgEl.innerText = messages[msgIdx];
     }
