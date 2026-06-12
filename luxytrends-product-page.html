@@ -462,6 +462,9 @@ nav a:hover { color: #246A73; border-bottom: 2px solid #B8CFC4; }
   border-radius: 50%;
   animation: spin 0.9s linear infinite;
 }
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
 .steps {
   display: flex;
   justify-content: space-between;
@@ -586,7 +589,7 @@ nav a:hover { color: #246A73; border-bottom: 2px solid #B8CFC4; }
       <div class="qty"><button id="minusBtn">−</button><input id="qtyInput" value="1"><button id="plusBtn">+</button></div>
       <button class="addbag" id="addBagBtn">Add to Bag 🧸</button>
     </div>
-    <button class="tryai" id="openAIModalBtn">✨ Try with Dream AI ✨</button>
+    <button class="tryai" id="openAIModalBtn">✨ Try with AI ✨</button>
     <button class="whatsapp-share" id="whatsappShareBtn">📱 Share on WhatsApp</button>
     <p class="tryai-note">✨ AI Baby Try-On — upload a photo & see the  little one in seconds</p>
   </section>
@@ -596,7 +599,7 @@ nav a:hover { color: #246A73; border-bottom: 2px solid #B8CFC4; }
   <div class="modal">
     <div class="modal-content">
       <div class="modal-top">
-        <div><h2>🌸 AI Dream Try-On</h2><p style="color:#6F7E78;">See your kids in style</p></div>
+        <div><h2>🌸 AI Try-On</h2><p style="color:#6F7E78;">See your kids in style</p></div>
         <button class="sizechart" id="closeModalBtn" style="font-size:1.8rem;">✕</button>
       </div>
       <div class="drop" id="dropZone">
@@ -739,9 +742,31 @@ generateBtn.onclick = async () => {
   aiGenBox.innerHTML = `
     <div class="gen-preview">
       <div class="spinner-sm"></div>
-      <div>Generating real AI try-on...</div>
+      <div id="genMessage" style="font-weight: 600; color: #16484F;">Generating real AI try-on...</div>
+      <div id="genTime" style="font-size:0.8rem; color:#888; margin-top:0.3rem;">0s elapsed</div>
     </div>
   `;
+
+  let elapsed = 0;
+  const messages = [
+    "Generating real AI try-on...",
+    "Analyzing garment...",
+    "Applying AI magic...",
+    "Refining details...",
+    "Almost there..."
+  ];
+  let msgIdx = 0;
+  
+  const timerInterval = setInterval(() => {
+    elapsed++;
+    const timeEl = document.getElementById('genTime');
+    const msgEl = document.getElementById('genMessage');
+    if(timeEl) timeEl.innerText = elapsed + "s elapsed";
+    if(elapsed % 2 === 0 && msgEl) {
+      msgIdx = (msgIdx + 1) % messages.length;
+      msgEl.innerText = messages[msgIdx];
+    }
+  }, 1000);
 
   try {
     const formData = new FormData();
@@ -778,6 +803,8 @@ generateBtn.onclick = async () => {
       }
     }
 
+    clearInterval(timerInterval);
+
     if (result && result.result_url) {
       aiGenBox.innerHTML = `
         <img src="${result.result_url}"
@@ -791,6 +818,7 @@ generateBtn.onclick = async () => {
     }
 
   } catch (err) {
+    clearInterval(timerInterval);
     aiGenBox.innerHTML = `
       <div class="gen-preview">
         <div>⚠️ ${err.message}</div>
